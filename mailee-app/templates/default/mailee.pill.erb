@@ -1,0 +1,19 @@
+Bluepill.application('mailee') do |app|
+
+  app.uid = "vagrant"
+  app.gid = "vagrant"
+  app.working_dir = "/vagrant"
+
+  app.process('resque') do |process|
+    process.pid_file = '/vagrant/resque.pid'
+    process.start_command = '/usr/bin/env QUEUE=* RAILS_ENV=development /opt/rbenv/shims/bundle exec rake resque:work'
+    process.daemonize = true
+  end
+
+  app.process('rails') do |process|
+    process.pid_file = '/vagrant/rails.pid'
+    process.start_command = '/usr/bin/env RAILS_ENV=development /opt/rbenv/shims/bundle exec rails s -p 3000 -b 0.0.0.0'
+    process.daemonize = true
+  end
+
+end
