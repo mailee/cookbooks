@@ -1,0 +1,31 @@
+{
+  "sources": {
+    "mailerq": {
+      "path": "."
+    },
+    "rabbitmq": {
+      "locked_version": "2.4.0"
+    },
+    "erlang": {
+      "locked_version": "1.4.2"
+    },
+    "apt": {
+      "locked_version": "2.3.6"
+    },
+    "yum": {
+      "locked_version": "3.0.6"
+    },
+    "yum-epel": {
+      "locked_version": "0.2.0"
+    },
+    "yum-erlang_solutions": {
+      "locked_version": "0.2.0"
+    },
+    "build-essential": {
+      "locked_version": "1.4.2"
+    },
+    "sqlite": {
+      "locked_version": "1.0.0"
+    }
+  }
+}
