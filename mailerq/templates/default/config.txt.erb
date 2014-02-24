@@ -1,0 +1,360 @@
+#   Configuration file for MailerQ application.
+#
+#
+#   RabbitMQ configuration.
+#
+#   MailerQ loads all e-mail meta data from a RabbitMQ message queue.
+#   The address and login data to access this message queue should be configured
+#   here.
+#
+#   If you have a cluster of RabbitMQ nodes, you can enter multiple hostnames
+#   delimited by a semi colon (';').
+#
+#   The message to sent are loaded from the 'rabbitmq-outbox' queue, and all
+#   mails that were delivered or that could not be delivered are posted to the
+#   queue set with 'rabbitmq-results'
+#
+#   You can specify separate queues for success and failure results with
+#   'rabbitmq-success' and 'rabbitmq-failure'. These queues will receive a
+#   subset of the messages posted to 'rabbitmq-results'
+#
+#   If a message can not immediately be delivered, or when it it greylisted and
+#   is going to be retries, it is published back to the outbox queue. MailerQ
+#   will later automatically pick it up from this outbox queue. If you want to
+#   process those intermediate messages too, you can also set a queue with the
+#   'rabbitmq-retry' queue. All copy of all failed deliveries that are going to
+#   be retried are posted there (as well as to the 'outbox' queue).
+#
+#   A special queue is the 'rabbitmq-inbox' queue. MailerQ can also open up a
+#   SMTP port to accept incoming messages. All messages received are
+#   automatically published to the inbox queue, in the same JSON format used in
+#   the outbox queue. If you set the inbox queue to the same queue as the
+#   outbox queue (this is what most users do), all mail that is accepted on the
+#   SMTP port is automatically forwarded by MailerQ to the appropriate
+#   destination. You can also choose to specify a different inbox queue if you
+#   like to handle the incoming messages differently.
+#
+#   If you want to disable any of result queues leave its value empty. The
+#   outbox and inbox queues can not be empty.
+#
+#   You can disable persistent delivery mode by setting rabbitmq-persistent
+#   to 0. It can be useful if your RabbitMQ server cannot keep up with
+#   the rate of publishing retries and delivery results.
+#
+rabbitmq-host:          <%= node['mailerq']['rabbitmq']['host'] %>
+rabbitmq-user:          <%= node['mailerq']['rabbitmq']['user'] %>
+rabbitmq-password:      <%= node['mailerq']['rabbitmq']['password'] %>
+rabbitmq-vhost:         <%= node['mailerq']['rabbitmq']['vhost'] %>
+rabbitmq-outbox:        <%= node['mailerq']['rabbitmq']['outbox'] %>
+rabbitmq-results:       <%= node['mailerq']['rabbitmq']['results'] %>
+rabbitmq-success:       <%= node['mailerq']['rabbitmq']['success'] %>
+rabbitmq-failure:       <%= node['mailerq']['rabbitmq']['failure'] %>
+rabbitmq-inbox:         <%= node['mailerq']['rabbitmq']['inbox'] %>
+rabbitmq-retry:         <%= node['mailerq']['rabbitmq']['retry'] %>
+rabbitmq-persistent:    <%= node['mailerq']['rabbitmq']['persistent'] %>
+
+#
+#   Storage configuration.
+#
+#   Sometimes MailerQ needs to republish mails back into the message queue -
+#   for example when a message is greylisted and should be retried later.
+#   When this republishing is done a few times for a single delivery, it causes
+#   extra network traffic between MailerQ and RabbitMQ. This traffic can be
+#   large, especially if emails contain attachments and/or embedded content.
+#
+#   To overcome this, MailerQ can be configured to store the full message bodies
+#   in a seperate storage system, and use RabbitMQ only for the email meta
+#   data (which is much smaller).
+#
+#   You can use a number of different storage systems for this: Couchbase,
+#   MongoDB, Mysql, Sqlite and PostgreSQL. (Be aware that in practice it
+#   only makes sense to use Couchbase or MongoDB, because it can handle the
+#   required high loads. If you do not have a Couchbase or MongoDB server,
+#   you can better not set up a storage system and put the message bodies
+#   in RabbitMQ, than using one of the SQL alternatives).
+#
+#   The address of a storage server can be specified as follows:
+#
+#       couchbase://password@hostname/bucketname
+#       mongo://hostname/database/collection
+#       sqlite:///path/to/database/file
+#       mysql://user:password@hostname/databasename
+#       postgresql://user:password@hostname/databasename
+#
+#   If you have a cluster of couchbase servers, you can split the different
+#   hostname with semi colons (';').
+#
+#   This is an optional setting. If you leave it empty, the full message bodies
+#   are always kept in RabbitMQ. MailerQ will work just as well (even faster
+#   because no extra communication with the storage server is necessary), but
+#   the load on RabbitMQ and the network will be higher.
+#
+storage: <%= node['mailerq']['storage'] %>
+
+
+#
+#   Database configuration.
+#
+#   The configuration for the various domains - like the max delivery rate and
+#   max connect rate - is stored in a database. The address of this database
+#   can be entered here.
+#
+#   MailerQ supports a number of database engines: mysql, sqlite and postgresql.
+#   The sqlite is the simplest one and the easiest one to set up (you do not
+#   need a seperate database server for it). However, the other supported
+#   engines are faster and better suited for high performance servers.
+#
+#   MailerQ takes care of creating all tables that it needs to run. If you
+#   use a mysql or postgresql database, you only need to ensure that the database
+#   is created and is writable. For a sqlite database you must ensure that the
+#   database file is writable. Directory /var/lib/mailerq is created during
+#   installation, and user mailerq already has rights to write to it.
+#
+#   The format for the database address is:
+#
+#       sqlite:///path/to/database/file
+#       mysql://user:password@hostname/databasename
+#       postgresql://user:password@hostname/databasename
+#
+database:                <%= node['mailerq']['database'] %>
+
+#
+#   MailerQ opens a web port that can be used for monitoring the application.
+#   Go with your browser to http://your-server-name:port to access the admin
+#   console. The static content (HTML, javascript, images, CSS) should be stored
+#   in the www-root directory.
+#
+#   To prevent that everyone has access to the management console, it required
+#   you to login first. On top of that, we advise to keep the console behind
+#   a firewall so that only trusted addresses can access it.
+#
+
+www-port:               <%= node['mailerq']['www-port'] %>
+www-dir:                <%= node['mailerq']['www-dir'] %>
+www-password:           <%= node['mailerq']['www-password'] %>
+
+#
+#   MailerQ opens a SMTP port to accept messages. All emails received on this
+#   port are automatically published to a message queue in RabbitMQ (see the
+#   options rabbitmq-inbox above).
+#
+#   The port over which connections are accepted can be set with this option.
+#   Note that if you set it to a value lower than 1024, you need to start
+#   MailerQ as root. Once MailerQ is started and has opened the port, it will
+#   change its user ID to a non-root user.
+#
+#   Next to the port, you should also set the IP range from which connections
+#   are allowed. We advise stronly(!) to only accept connections from IPs that
+#   you trust, because otherwise you open up an open SMTP proxy and the whole
+#   world can use your servers for sending out spam. MailerQ literally accepts
+#   all messages and puts them on the message queue. You can add a comma
+#   seperated list of IP addresses.
+#
+
+smtp-port:               <%= node['mailerq']['smtp-port'] %>
+smtp-range:              <%= node['mailerq']['smtp-range'] %>
+
+#
+#   Path to log directory
+#
+#   All abnormal events are logged to the "error.log" file in this directory.
+#   These include failures as databases that are suddenly offline, or RabbitMQ
+#   connections that are lost.
+#
+#   MailerQ will also create logfiles for all delivery attempts. Those events
+#   are logged in files named "deliveries.log.number", where number is an
+#   incrementing number. MailerQ moves on to the next file every 100000 lines,
+#   and removes the files that are too old. The log-history option holds the
+#   number of old files to keep on disk before files are removed.
+#
+
+log-directory:          <%= node['mailerq']['log-directory'] %>
+log-history:            <%= node['mailerq']['log-history'] %>
+
+#
+#   Default delivery limit for domains.
+#
+#   In the MySQL database mentioned above you can store the limits for each
+#   individual domain - it is for example possible to have different limits for
+#   mails sent to GMAIL.COM than for mails to VERYSMALLCOMPANY.COM.
+#
+#   If no specific settings are found in the database, the server will rely on
+#   the defaults mentioned here. The variables hold the max number of messages
+#   to deliver per minute to a domain, the max number of connect attempts to
+#   make to a domain in one minute (remember that multiple messages can be
+#   delivered over the same connection, so the actual number of delivered
+#   messages can exceed the max number of connect attempts). The last variable
+#   holds the max number of connections that can exist at the same time to a
+#   domain.
+#
+#   Use -1 for unlimited.
+#
+
+domain-maxmessages:      <%= node['mailerq']['domain-maxmessages'] %>
+domain-maxconnects:      <%= node['mailerq']['domain-maxconnects'] %>
+domain-maxconnections:   <%= node['mailerq']['domain-maxconnections'] %>
+
+#
+#   Just like there are default limits per IP (see above), you can also set
+#   default limits per IP address. If a certain domain ("GMAIL.COM" for example)
+#   can be reached over different IPs, the domain-max* settings hold the limits
+#   for the entire domain. The following variables can be used to limit the
+#   deliveries to a specific IP address.
+#
+#   Thus, if GMAIL.COM is accessible via 4 IP addresses, the variable
+#   "domain-maxmessages" limits the total mails per minute that are delivered
+#   to the GMAIL.COM domain, and the "ip-maxmessages" limits the number of mails
+#   that are delivered to each of its IPs.
+#
+#   The settings in this file just hold the defaults - they can be overridden
+#   by changing the values stored in the database.
+#
+#   It does not make sense to set these limits to higher values than the
+#   settings per domain.
+#
+#   Use -1 for unlimited.
+#
+ip-maxmessages:         <%= node['mailerq']['ip-maxmessages'] %>
+ip-maxconnects:         <%= node['mailerq']['ip-maxconnects'] %>
+ip-maxconnections:      <%= node['mailerq']['ip-maxconnections'] %>
+
+#
+#   Each connection that is made with a remote server also has its limits, and
+#   just like the settings per domain and per IP, these settings can also be
+#   configured for each specific delivery domain. The settings in this file
+#   are just the defaults in case no settings for a domain exist in the database.
+#
+#   Once a connection with a remote peer is open, MailerQ will keep it open to
+#   send multiple messages over it. The max number of messages to send over one
+#   connection can be limited with the 'connection-maxmessages' variable. The
+#   connection will be closed after this number of messages have been sent over
+#   it, and for subsequent messages a new connection will be kept open.
+#
+#   If the delivery to a certain domain or server is throttled, MailerQ inserts
+#   small delays in between the messages, so that the receiving server does not
+#   receive too many messages at the same time. The variable 'connection-maxidle'
+#   holds the number of milliseconds that a connection is at most kept open
+#   for throttling. Thus, if you limit the delivery rate to an IP to 30 messages
+#   per second, and when you also set the maxidle setting to 1 second, it will
+#   not be possible to send mulitple mails over the same connection, because the
+#   1 second idle time is too short for the required delay between messages.
+#
+#   The 'connection-secure' variable can be set to 1 or 0 to tell MailerQ to
+#   try to use encrypted TLS connections to communicate with the remote server.
+#   Communication over TLS is slower than normal unencrypted communication.
+#
+
+connection-maxmessages: <%= node['mailerq']['connection-maxmessages'] %>
+connection-maxidle:     <%= node['mailerq']['connection-maxidle'] %>
+connection-secure:      <%= node['mailerq']['connection-secure'] %>
+
+#
+#   User ID
+#
+#   If MailerQ uses port(s) in restricted range (0-1024) it must be started
+#   initially as user root. This is required because MailerQ needs to open
+#   a network port for the SMTP server and WWW server. This is ports can be
+#   set to a different value in this config file (see smtp-port, www-port).
+#   Ports 25 and 80 can normally only be opened by the root user.
+#
+#   When MailerQ has opened these ports, it will drop its root privileges and
+#   continues running under a different user ID. The ID of that user can be
+#   set here.
+#
+#   To run MailerQ as a normal user leave this value empty, or set it to the
+#   users name. Remember to use ports higher than 1024 and error-log path
+#   that can be written to by this user
+#
+#   User mailerq is created on package installation.
+#
+
+user:                    <%= node['mailerq']['user'] %>
+
+#
+#   Number of threads.
+#
+#   The mailerq application starts up multiple worker for sending out mail,
+#   and doing SMTP communications. The number of threads to start can be
+#   configured here. On a dedicated machine it is wise to set this to a value
+#   close to the number of cores in the machine.
+#
+#   Internally there are even more threads running: a master thread and some
+#   helper threads for MySQL and RabbitMQ communications.
+#
+
+max-threads:             <%= node['mailerq']['max-threads'] %>
+
+#
+#   Max number of connections in total.
+#
+#   To prevent that the server runs out of filedescriptors, it only opens a
+#   certain number of connections at the same time. Make sure that this variable
+#   does not exceed the limit for the number of open files! Better leave at
+#   least 100 filedescriptors to the application that can be used for
+#   communication with databases, logfiles, message queues and dns servers.
+#
+
+max-connections:         <%= node['mailerq']['max-connections'] %>
+
+#
+#   Max number of messages loaded into main memory. These are the number of
+#   messages that MailerQ loads from RabbitMQ and stores in internal in-memory
+#   queues. Set this to -1 to use unlimited.
+#
+
+max-messages:            <%= node['mailerq']['max-messages'] %>
+
+
+#
+#   Max memory to use by MailerQ
+#
+#   This setting can be specified in GB or MB (for example '16GB' or '512MB')
+#   To set it to unlimited leave the value empty.
+#
+#   When the limit is reached, MailerQ stops loading messages from the message
+#   queue until more memory is available.
+#
+
+max-memory:            <%= node['mailerq']['max-memory'] %>
+
+#
+#   Max delivery time
+#
+#   When a message cannot be delivered immediately because of unresponsive
+#   receivers, greylisting or throttling, MailerQ publishes back the email
+#   to the outbox queue for later delivery. This can result in emails that
+#   are sent much later than the time that you first added them to the message queue.
+#
+#   This setting is time in seconds from first delivery attempt.
+#
+
+max-deliver-time:         <%= node['mailerq']['max-deliver-time'] %>
+
+
+#
+#   Default max number of attempts
+#
+#   Just like a max delivery time, you can also control the max number of
+#   attempts that MailerQ uses to send out an email. If a first attempt
+#   fails because a remote server is unreachable or does not immediately
+#   accept the message, MailerQ will make a new attempt a little later.
+#
+
+max-attempts:            <%= node['mailerq']['max-attempts'] %>
+
+
+#
+#   File that holds licensing information
+#
+
+license:                <%= node['mailerq']['license']['path'] %>
+
+
+
+
+
+
+
+
+
+
