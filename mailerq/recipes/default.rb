@@ -13,15 +13,29 @@ package "opendkim" do
   action :install
 end
 
-cookbook_file "/tmp/mailerq-0.7.4-x86_64.deb" do
-  source "mailerq-0.7.4-x86_64.deb"
-  mode "0644"
-  action :create
-end
+case node[:platform]
+when "ubuntu","debian"
+  cookbook_file "/tmp/mailerq-0.7.4-x86_64.deb" do
+    source "mailerq-0.7.4-x86_64.deb"
+    mode "0644"
+    action :create
+  end
 
-dpkg_package "mailerq" do
-  source "/tmp/mailerq-0.7.4-x86_64.deb"
-  action :install
+  dpkg_package "mailerq" do
+    source "/tmp/mailerq-0.7.4-x86_64.deb"
+    action :install
+  end
+when "centos"
+  cookbook_file "/tmp/mailerq-0.7.4-x86_64.rpm" do
+    source "mailerq-0.7.4-x86_64.rpm"
+    mode "0644"
+    action :create
+  end
+
+  yum_package "mailerq" do
+    source "/tmp/mailerq-0.7.4-x86_64.rpm"
+    action :install
+  end
 end
 
 template "/etc/mailerq/config.txt" do
