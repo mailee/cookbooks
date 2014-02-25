@@ -25,7 +25,7 @@ when "ubuntu","debian"
     source "/tmp/mailerq-0.7.4-x86_64.deb"
     action :install
   end
-when "centos"
+when "centos","redhat", "amzn","amzn1"
   cookbook_file "/tmp/mailerq-0.7.4-x86_64.rpm" do
     source "mailerq-0.7.4-x86_64.rpm"
     mode "0644"
