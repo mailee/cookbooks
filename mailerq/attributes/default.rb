@@ -39,9 +39,9 @@
 #   the rate of publishing retries and delivery results.
 
 default['mailerq']['rabbitmq']['host'] = 'localhost'
-default['mailerq']['rabbitmq']['user'] = 'guest'
+default['mailerq']['rabbitmq']['user'] = node['rabbitmq']['default_user'] || 'guest' 
 default['mailerq']['rabbitmq']['port'] = 5672
-default['mailerq']['rabbitmq']['password'] = 'guest'
+default['mailerq']['rabbitmq']['password'] = node['rabbitmq']['default_pass'] ||'guest'
 default['mailerq']['rabbitmq']['vhost'] = '/'
 default['mailerq']['rabbitmq']['outbox'] = 'outbox'
 default['mailerq']['rabbitmq']['results'] = nil # 'results'
