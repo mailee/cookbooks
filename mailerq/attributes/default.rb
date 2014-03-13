@@ -40,10 +40,11 @@
 
 default['mailerq']['rabbitmq']['host'] = 'localhost'
 default['mailerq']['rabbitmq']['user'] = 'guest'
+default['mailerq']['rabbitmq']['port'] = 5672
 default['mailerq']['rabbitmq']['password'] = 'guest'
 default['mailerq']['rabbitmq']['vhost'] = '/'
 default['mailerq']['rabbitmq']['outbox'] = 'outbox'
-default['mailerq']['rabbitmq']['results'] = 'results'
+default['mailerq']['rabbitmq']['results'] = nil # 'results'
 default['mailerq']['rabbitmq']['success'] = 'success'
 default['mailerq']['rabbitmq']['failure'] = 'failure'
 default['mailerq']['rabbitmq']['inbox'] = 'outbox'
@@ -349,6 +350,16 @@ default['mailerq']['license']['company'] = 'MailerQ Free License'
 default['mailerq']['license']['messagesperminute'] = 100
 default['mailerq']['license']['expire'] = '2024-01-01 00:00:00'
 default['mailerq']['license']['signature'] = 'AZVBFWMkBG6IjDwbJYZx7utpX4Ibbx17jfE5CKTmaewzxsOL6Hbdnr/DaUaBniD87XurRvlfcpYJqtBBXgj3h3xrlU1SXSV89yiHH8W7N9FQuvg11hokRd1I0PgtoNDFNnXyefUts+0xNsIA9XYYvBD3ygouw20pkXN2Zeb22zwKMJY='
+
+default['database']['host'] = '127.0.0.1'
+default['database']['port'] = 5432
+default['database']['database'] = 'mailee_development'
+default['database']['username'] = 'mailee'
+default['database']['password'] = '12345'
+
+# options from the pg node js library
+default['database']['native'] = true
+default['database']['ssl'] = true
 
 
 

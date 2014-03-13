@@ -26,6 +26,24 @@
     },
     "sqlite": {
       "locked_version": "1.0.0"
+    },
+    "git": {
+      "locked_version": "3.1.0"
+    },
+    "dmg": {
+      "locked_version": "2.1.4"
+    },
+    "windows": {
+      "locked_version": "1.30.0"
+    },
+    "chef_handler": {
+      "locked_version": "1.1.4"
+    },
+    "runit": {
+      "locked_version": "1.5.8"
+    },
+    "nodejs": {
+      "locked_version": "1.3.0"
     }
   }
 }
