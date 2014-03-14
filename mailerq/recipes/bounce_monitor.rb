@@ -26,6 +26,15 @@ when "ubuntu","debian"
     action :install
   end
 when "centos","redhat", "amazon", "amazon_linux"
+  cookbook_file "/tmp/postgresql93-libs-9.3rc1-1PGDG.rhel6.x86_64.rpm" do
+    source "postgresql93-libs-9.3rc1-1PGDG.rhel6.x86_64.rpm"
+    mode "0644"
+    action :create
+  end
+  yum_package "postgresql93-libs" do
+    source "/tmp/postgresql93-libs-9.3rc1-1PGDG.rhel6.x86_64.rpm"
+    action :install
+  end
   cookbook_file "/tmp/postgresql93-9.3rc1-1PGDG.rhel6.x86_64.rpm" do
     source "postgresql93-9.3rc1-1PGDG.rhel6.x86_64.rpm"
     mode "0644"
