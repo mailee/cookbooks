@@ -40,6 +40,10 @@ when "centos","redhat", "amazon", "amazon_linux"
   end
 end
 
+package "opendkim" do
+  action :install
+end
+
 template "/etc/mailerq/config.txt" do
   source "config.txt.erb"
 end
@@ -82,8 +86,13 @@ unless File.exists? "/etc/mailerq/setup_with_success"
   end
 end
 
-service "mailerq" do
+service "opendkim" do
   action :restart
+end
+
+
+service "mailerq" do
+  action :start
 end
 
 

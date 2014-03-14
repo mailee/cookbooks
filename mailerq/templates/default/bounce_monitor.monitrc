@@ -1,5 +1,3 @@
-bounce_monitor.monitrc
-
 check process bounce_monitor with pidfile /opt/mailerq_bounce_monitor/bounce_monitor.pid
    start program = "node /opt/mailerq_bounce_monitor/bounce_monitor start"
    stop  program = "node /opt/mailerq_bounce_monitor/bounce_monitor stop"
