@@ -65,7 +65,7 @@ unless File.exists? "/etc/mailerq/setup_with_success"
   create_exchange = lambda { |exchange, configs| "rabbitmqadmin #{configs.join(' ')} declare exchange name=#{exchange} type=direct durable=true auto_delete=false"}
   bind_exchange_to_queue = lambda { |exchange, queue, configs| "rabbitmqadmin #{configs.join(' ')} declare binding source=#{exchange} destination=#{queue} routing_key=0"}
   queues = [ node['mailerq']['rabbitmq']['failure'], node['mailerq']['rabbitmq']['retry'], node['mailerq']['rabbitmq']['success'] ]
-  configs = ['-H', node['mailerq']['rabbitmq']['host'], '-P', 15672, '-V', node['mailerq']['rabbitmq']['vhost'], '-u', node['mailerq']['rabbitmq']['user'], '-p', node['mailerq']['rabbitmq']['password'] ]
+  configs = ['-H', node['mailerq']['rabbitmq']['host'], '-P', 15672, '-V', node['mailerq']['rabbitmq']['vhost'] ]#, '-u', node['mailerq']['rabbitmq']['user'], '-p', node['mailerq']['rabbitmq']['password'] ]
   commands = queues.map {|q| create_queue.call(q, configs)}
   commands.concat queues.map{|q| create_exchange.call(q, configs) }
   commands.concat queues.map{|q| bind_exchange_to_queue.call(q, q, configs) }
