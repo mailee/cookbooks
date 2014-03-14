@@ -57,11 +57,6 @@ when "centos","redhat", "amazon", "amazon_linux"
     command "echo 'PATH=$PATH:/usr/pgsql-9.3/bin' >> /etc/bashrc"
   end
 
-  # lets make some black magic to install node-gyp
-  # according to https://github.com/TooTallNate/node-gyp/issues/363
-  execute "move python gyp" do
-    command "mv `python -c 'import gyp; print gyp.__file__'` `python -c 'import gyp; print gyp.__file__'`_backup"
-  end
 end
 
 
