@@ -36,14 +36,13 @@ service "rsyslog" do
   action :start
 end
 
-
-if Dir.exists?('/etc/monit.d')
-	service "monit" do
-	  action :restart
-	end
-  template "/etc/monit.d/bounce_monitor.monitrc" do
-    source "bounce_monitor.monitrc"
-  end
+template "/etc/monit.d/bounce_monitor.monitrc" do
+  source "bounce_monitor.monitrc"
+  not_if { ::File.directory?('/etc/monit.d') }
+end
+service "monit" do
+  action :restart
+  not_if { ::File.directory?('/etc/monit.d') }
 end
 
 
