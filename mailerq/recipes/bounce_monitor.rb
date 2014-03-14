@@ -17,6 +17,44 @@ template "/opt/mailerq_bounce_monitor/rabbitmq.json" do
   source "rabbitmq.json.erb"
 end
 
+case node[:platform]
+when "ubuntu","debian"
+  apt_package "libpq" do
+    action :install
+  end
+  apt_package "libpq-dev" do
+    action :install
+  end
+when "centos","redhat", "amazon", "amazon_linux"
+  cookbook_file "/tmp/postgresql93-9.3rc1-1PGDG.rhel6.x86_64.rpm" do
+    source "postgresql93-9.3rc1-1PGDG.rhel6.x86_64.rpm"
+    mode "0644"
+    action :create
+  end
+  yum_package "postgresql93-client" do
+    source "/tmp/postgresql93-9.3rc1-1PGDG.rhel6.x86_64.rpm"
+    action :install
+  end
+  cookbook_file "/tmp/postgresql93-devel-9.3rc1-1PGDG.rhel6.x86_64.rpm" do
+    source "postgresql93-devel-9.3rc1-1PGDG.rhel6.x86_64.rpm"
+    mode "0644"
+    action :create
+  end
+  yum_package "postgresql93-devel" do
+    source "/tmp/postgresql93-devel-9.3rc1-1PGDG.rhel6.x86_64.rpm"
+    action :install
+  end
+  execute "add pg_config to PATH" do
+    command "echo 'PATH=$PATH:/usr/pgsql-9.3/bin' >> /etc/bashrc"
+  end
+
+  # lets make some black magic to install node-gyp
+  # according to https://github.com/TooTallNate/node-gyp/issues/363
+  execute "move python gyp" do
+    command "mv `python -c 'import gyp; print gyp.__file__'` `python -c 'import gyp; print gyp.__file__'`_backup"
+  end
+end
+
 
 execute "npm install" do
   cwd "/opt/mailerq_bounce_monitor"
