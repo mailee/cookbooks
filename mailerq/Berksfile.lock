@@ -13,10 +13,10 @@
       "locked_version": "2.3.6"
     },
     "yum": {
-      "locked_version": "3.0.6"
+      "locked_version": "3.1.0"
     },
     "yum-epel": {
-      "locked_version": "0.2.0"
+      "locked_version": "0.3.2"
     },
     "yum-erlang_solutions": {
       "locked_version": "0.2.0"
