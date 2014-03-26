@@ -77,23 +77,3 @@ end
 service "rsyslog" do
   action :start
 end
-
-template "/etc/monit.d/bounce_monitor.monitrc" do
-  source "bounce_monitor.monitrc"
-  not_if { !::File.directory?('/etc/monit.d') }
-end
-template "/etc/monit.d/mailerq.monitrc" do
-  source "mailerq.monitrc"
-  not_if { !::File.directory?('/etc/monit.d') }
-end
-
-service "monit" do
-  action :restart
-  not_if { !::File.directory?('/etc/monit.d') }
-end
-
-
-
-service "mailerq" do
-  action :restart
-end

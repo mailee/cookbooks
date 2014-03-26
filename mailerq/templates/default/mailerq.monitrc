@@ -1,3 +1,3 @@
 check process mailerq with pidfile /tmp/mailerq.pid
-   start program = "service mailerq start"
-   stop  program = "service mailerq stop"
+   start program = "/sbin/service mailerq start"
+   stop  program = "/sbin/service mailerq stop"
