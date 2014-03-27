@@ -15,17 +15,17 @@ options:
   # number of messages that sender will loop before reloading the relays and the active_messages
   sender_block_size: 100
 
-  # the amount of seconds that sender will block for redis list pop (redis.blpop) 
-  sender_list_pop_block_timeout: 1
-  
+  # the amount of seconds that sender will block for redis list pop (redis.blpop)
+  sender_list_pop_block_timeout: 0
+
   # if the size of the message queue exceed this value it will sleep before put more messages into the queue
   queue_max_size: 1000
 
   # this is the amount of time that the message will sleep before put more messages into the queue, if it exceed the max_queue_size
-  queue_sleep_time: 2
-  
+  queue_sleep_time: 20
+
   # this is the amount of deliveries that the message will get each time it fetches the cursor
-  message_cursor_rows_to_fetch: 2000
+  message_cursor_rows_to_fetch: 4000
 
 redis:
   host: localhost

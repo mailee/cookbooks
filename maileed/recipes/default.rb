@@ -1,4 +1,3 @@
-require 'yaml'
 #
 # Cookbook Name:: maileed
 # Recipe:: default
@@ -7,10 +6,11 @@ require 'yaml'
 #
 # All rights reserved - Do Not Redistribute
 #
-include_recipe "git"
 include_recipe 'python'
 include_recipe 'redisio::install'
 include_recipe 'redisio::enable'
+include_recipe 'dnsmasq::dns'
+include_recipe 'bluepill'
 
 
 execute "apt-get update"
@@ -52,15 +52,6 @@ file "/home/#{user}/.ssh/id_rsa.pub" do
   not_if { ::File.exists?("/home/#{user}/.ssh/id_rsa.pub") }
 end
 
-
-git "/opt/maileed/" do
-  repository "git@bitbucket.org:panop/maileed.git"
-  revision "master"
-  action :sync
-end
-
-file "/opt/maileed/config.yml" do
-  mode "0644"
-  action :create
-  content YAML.dump(node['maileed'])
+link "/usr/local/bin/bluepill" do
+  to "/opt/chef/embedded/bin/bluepill"
 end

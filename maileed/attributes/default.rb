@@ -1,5 +1,14 @@
 default['maileed']['ssh']['public_key'] = '12345'
 default['maileed']['ssh']['private_key'] = '12345'
+default['maileed']['total_senders'] = 60
+default['maileed']['uid'] = `ls /home/`.split("\n")[0]
+default['maileed']['gid'] = `ls /home/`.split("\n")[0]
+default['maileed']['deploy_dir'] = '/opt/maileed'
+default['maileed']['pid_dir'] = default['maileed']['deploy_dir'] + '/pids'
+
+
+
+
 
 default['maileed']['database'] = {
   'host' => 'localhost',
