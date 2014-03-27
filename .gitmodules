@@ -37,3 +37,24 @@
 [submodule "yum"]
 	path = yum
 	url = https://github.com/opscode-cookbooks/yum.git
+[submodule "chef-dnsmasq"]
+	path = chef-dnsmasq
+	url = https://github.com/moutten/chef-dnsmasq.git
+[submodule "python"]
+	path = python
+	url = https://github.com/poise/python.git
+[submodule "redisio"]
+	path = redisio
+	url = https://github.com/brianbianco/redisio.git
+[submodule "ulimit"]
+	path = ulimit
+	url = https://github.com/bmhatfield/chef-ulimit.git
+[submodule "bluepill"]
+	path = bluepill
+	url = https://github.com/opscode-cookbooks/bluepill.git
+[submodule "rsyslog"]
+	path = rsyslog
+	url = https://github.com/opscode-cookbooks/rsyslog.git
+[submodule "hosts_file"]
+	path = hosts_file
+	url = https://github.com/hw-cookbooks/hosts_file.git
