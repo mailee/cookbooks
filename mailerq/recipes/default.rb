@@ -11,7 +11,6 @@ include_recipe "rabbitmq::mgmt_console"
 include_recipe "sqlite"
 include_recipe 'dnsmasq::dns'
 
-
 package "opendkim" do
   action :install
 end

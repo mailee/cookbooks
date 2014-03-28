@@ -58,3 +58,6 @@
 [submodule "hosts_file"]
 	path = hosts_file
 	url = https://github.com/hw-cookbooks/hosts_file.git
+[submodule "dnsmasq"]
+	path = dnsmasq
+	url = https://github.com/hw-cookbooks/dnsmasq.git
