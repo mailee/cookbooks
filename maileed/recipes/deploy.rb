@@ -9,7 +9,7 @@ template '/etc/bluepill/maileed.pill' do
 end
 
 git node['maileed']['deploy_dir'] do
-  repository "git@bitbucket.org:panop/maileed.git"
+  repository node['maileed']['repo']
   revision "master"
   action :sync
   user user
