@@ -3,6 +3,11 @@
     "mailerq": {
       "path": "."
     },
+    "dnsmasq": {
+      "locked_version": "0.1.1",
+      "git": "https://github.com/moutten/chef-dnsmasq.git",
+      "ref": "4da7c38dab77dcb1e6d2b996cb2d325244e36575"
+    },
     "rabbitmq": {
       "locked_version": "2.4.0"
     },
@@ -13,10 +18,10 @@
       "locked_version": "2.3.6"
     },
     "yum": {
-      "locked_version": "3.1.0"
+      "locked_version": "3.0.6"
     },
     "yum-epel": {
-      "locked_version": "0.3.2"
+      "locked_version": "0.2.0"
     },
     "yum-erlang_solutions": {
       "locked_version": "0.2.0"

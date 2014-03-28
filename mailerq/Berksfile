@@ -1,3 +1,5 @@
 site :opscode
 
 metadata
+
+cookbook 'dnsmasq', git: 'https://github.com/moutten/chef-dnsmasq.git'
