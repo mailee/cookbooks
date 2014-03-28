@@ -73,12 +73,9 @@ Vagrant.configure("2") do |config|
       'maileed' => {
         'database' => {
           'host' => '33.33.33.1'
-        }
+        },
+        'repo' => ""
       },
-      'dnsmasq' => {
-        'dns' => {
-        }
-      }
     }
 
     chef.run_list = [

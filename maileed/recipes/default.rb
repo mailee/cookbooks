@@ -23,6 +23,4 @@ python_packages = ['psycopg2','lxml','pyyaml','daemon','lockfile','setproctitle'
 
 python_packages.each {|package| python_pip package }
 
-link "/usr/local/bin/bluepill" do
-  to "/opt/chef/embedded/bin/bluepill"
-end
+gem_package "bluepill"
