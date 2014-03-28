@@ -24,3 +24,7 @@ python_packages = ['psycopg2','lxml','pyyaml','daemon','lockfile','setproctitle'
 python_packages.each {|package| python_pip package }
 
 gem_package "bluepill"
+
+link "/usr/bin/bluepill" do
+  to "/usr/local/bin/bluepill"
+end
