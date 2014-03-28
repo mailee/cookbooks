@@ -23,56 +23,6 @@ python_packages = ['psycopg2','lxml','pyyaml','daemon','lockfile','setproctitle'
 
 python_packages.each {|package| python_pip package }
 
-user = `ls /home/`.split("\n")[0]
-
-directory "/home/#{user}/.ssh" do
-  owner user
-  group user
-  mode 00644
-  action :create
-  not_if { ::File.directory?("/home/#{user}/.ssh") }
-end
-
-file "/home/#{user}/.ssh/id_rsa" do
-  owner user
-  group user
-  mode "0600"
-  action :create
-  content node['maileed']['ssh']['private_key']
-  not_if { ::File.exists?("/home/#{user}/.ssh/id_rsa") }
-
-end
-
-file "/home/#{user}/.ssh/id_rsa.pub" do
-  owner user
-  group user
-  mode "0644"
-  action :create
-  content node['maileed']['ssh']['public_key']
-  not_if { ::File.exists?("/home/#{user}/.ssh/id_rsa.pub") }
-end
-
-directory "/root/.ssh" do
-  mode 00644
-  action :create
-  not_if { ::File.directory?("/root/.ssh") }
-end
-
-file "/root/.ssh/id_rsa" do
-  mode "0600"
-  action :create
-  content node['maileed']['ssh']['private_key']
-  not_if { ::File.exists?("/root/.ssh/id_rsa") }
-
-end
-
-file "/root/.ssh/id_rsa.pub" do
-  mode "0644"
-  action :create
-  content node['maileed']['ssh']['public_key']
-  not_if { ::File.exists?("/root/.ssh/id_rsa.pub") }
-end
-
 link "/usr/local/bin/bluepill" do
   to "/opt/chef/embedded/bin/bluepill"
 end

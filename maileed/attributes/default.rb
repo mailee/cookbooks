@@ -6,6 +6,7 @@ default['maileed']['gid'] = `ls /home/`.split("\n")[0]
 default['maileed']['deploy_dir'] = '/opt/maileed'
 default['maileed']['pid_dir'] = default['maileed']['deploy_dir'] + '/pids'
 default['dnsmasq'] = {"dns" => {}}
+default['maileed']['repo'] = 'https://git@bitbucket.org/panop/maileed.git'
 
 
 default['maileed']['database'] = {
