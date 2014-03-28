@@ -52,6 +52,27 @@ file "/home/#{user}/.ssh/id_rsa.pub" do
   not_if { ::File.exists?("/home/#{user}/.ssh/id_rsa.pub") }
 end
 
+directory "/root/.ssh" do
+  mode 00644
+  action :create
+  not_if { ::File.directory?("/root/.ssh") }
+end
+
+file "/root/.ssh/id_rsa" do
+  mode "0600"
+  action :create
+  content node['maileed']['ssh']['private_key']
+  not_if { ::File.exists?("/root/.ssh/id_rsa") }
+
+end
+
+file "/root/.ssh/id_rsa.pub" do
+  mode "0644"
+  action :create
+  content node['maileed']['ssh']['public_key']
+  not_if { ::File.exists?("/root/.ssh/id_rsa.pub") }
+end
+
 link "/usr/local/bin/bluepill" do
   to "/opt/chef/embedded/bin/bluepill"
 end
