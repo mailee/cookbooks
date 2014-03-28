@@ -8,6 +8,13 @@ template '/etc/bluepill/maileed.pill' do
   source 'maileed.pill.erb'
 end
 
+directory node['maileed']['deploy_dir'] do
+  action :create
+  owner user
+  group user
+  not_if { ::File.directory?(node['maileed']['deploy_dir']) }
+end
+
 git node['maileed']['deploy_dir'] do
   repository node['maileed']['repo']
   revision "master"
@@ -17,7 +24,8 @@ end
 
 directory node['maileed']['pid_dir'] do
   action :create
-  user user
+  owner user
+  group user
   not_if { ::File.directory?(node['maileed']['pid_dir']) }
 end
 
