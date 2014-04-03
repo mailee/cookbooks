@@ -1,0 +1,14 @@
+#upstart!
+description "Stop multiple maileed senders"
+start on stopping maileed
+
+task
+
+env NUM_SENDERS=<%= node['maileed']['total_senders'] %>
+
+script
+  for i in `seq 1 $NUM_SENDERS`
+  do
+    stop maileed-sender N=$i
+  done
+end script

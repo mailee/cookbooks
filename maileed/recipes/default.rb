@@ -10,7 +10,6 @@ include_recipe 'python'
 include_recipe 'redisio::install'
 include_recipe 'redisio::enable'
 include_recipe 'dnsmasq::dns'
-include_recipe 'bluepill'
 
 
 execute "apt-get update"
@@ -23,8 +22,16 @@ python_packages = ['psycopg2','lxml','pyyaml','daemon','lockfile','setproctitle'
 
 python_packages.each {|package| python_pip package }
 
-gem_package "bluepill"
+upstart_scripts = ['maileed.conf', 'maileed-master.conf', 'maileed-senders.conf', 'maileed-sender.conf','maileed-senders-stop.conf']
 
-link "/usr/bin/bluepill" do
-  to "/usr/local/bin/bluepill"
+upstart_scripts.each do |script|
+  template "/etc/init/#{script}" do
+    source "upstart/#{script}.erb"
+    mode "0755"
+  end
+end
+
+service "maileed" do
+  action [:stop, :start]
+  provider Chef::Provider::Service::Upstart
 end

@@ -1,0 +1,6 @@
+#!upstart
+description "Maileed Sender"
+instance $N
+respawn
+
+exec su - <%= node['maileed']['deploy_user'] %> -c 'cd <%= node['maileed']['deploy_dir'] %>; python src/sender_instance.py >> /var/log/maileed/sender.log 2>&1'

@@ -1,0 +1,14 @@
+#upstart!
+description "Start multiple maileed senders"
+start on starting maileed
+console output
+task
+
+env NUM_SENDERS=<%= node['maileed']['total_senders'] %>
+
+script
+  for i in `seq 1 $NUM_SENDERS`
+  do
+    start maileed-sender N=$i
+  done
+end script

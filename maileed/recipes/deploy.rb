@@ -4,10 +4,6 @@ include_recipe "git"
 
 user = `ls /home/`.split("\n")[0]
 
-template '/etc/bluepill/maileed.pill' do
-  source 'maileed.pill.erb'
-end
-
 directory node['maileed']['deploy_dir'] do
   action :create
   owner user
@@ -41,11 +37,6 @@ file "#{node['maileed']['deploy_dir']}/config.yml" do
   content YAML::dump(config)
 end
 
-bluepill_service 'maileed' do
-  action [:stop]
-end
-
-
-bluepill_service 'maileed' do
-  action [:enable, :load, :start]
+service 'maileed' do
+  action [:restart]
 end

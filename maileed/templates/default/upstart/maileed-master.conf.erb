@@ -1,0 +1,8 @@
+#!upstart
+
+start on starting maileed
+stop on stopping maileed
+
+respawn
+
+exec su - <%= node['maileed']['deploy_user'] %> -c 'cd <%= node['maileed']['deploy_dir'] %>; python src/maileed.py >> /var/log/maileed/master.log 2>&1'
