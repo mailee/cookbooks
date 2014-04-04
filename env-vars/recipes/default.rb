@@ -14,7 +14,7 @@ node[:deploy].each do |application, deploy|
   end
 
   template "/etc/environment" do
-    source "environment.rb"
+    source "environment.erb"
     mode "0644"
     owner "root"
     group "root"
