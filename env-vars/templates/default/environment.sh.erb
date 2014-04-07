@@ -1,0 +1,5 @@
+#!/bin/sh
+
+<%- @env_vars.each do |k, v| %>
+export <%= k =%>=<%= v %>
+<%- end %>
