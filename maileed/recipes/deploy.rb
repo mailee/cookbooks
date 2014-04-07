@@ -38,5 +38,5 @@ file "#{node['maileed']['deploy_dir']}/config.yml" do
 end
 
 service 'maileed' do
-  action [:restart]
+  action [:stop, :start]
 end

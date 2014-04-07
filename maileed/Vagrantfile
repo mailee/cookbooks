@@ -72,11 +72,11 @@ Vagrant.configure("2") do |config|
     chef.json = {
       'maileed' => {
         'database' => {
-          'host' => '33.33.33.1'
+          'host' => 'localhost'
         },
-        'repo' => "git@bitbucket.org/panop/maileed.git",
+        'repo' => "git@bitbucket.org:/panop/maileed.git",
         'deploy_user' => 'vagrant',
-        'total_senders' => 60
+        'total_senders' => 2
       },
     }
 

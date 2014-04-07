@@ -18,7 +18,7 @@ package 'libxml2-dev'
 package 'libxslt-dev'
 
 
-python_packages = ['psycopg2','lxml','pyyaml','daemon','lockfile','setproctitle','html2text','redis']
+python_packages = ['psycopg2','lxml','pyyaml','daemon','lockfile','setproctitle','html2text','redis','pika']
 
 python_packages.each {|package| python_pip package }
 
@@ -29,9 +29,4 @@ upstart_scripts.each do |script|
     source "upstart/#{script}.erb"
     mode "0755"
   end
-end
-
-service "maileed" do
-  action [:stop, :start]
-  provider Chef::Provider::Service::Upstart
 end
