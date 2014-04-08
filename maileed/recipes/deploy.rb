@@ -39,4 +39,5 @@ end
 
 service 'maileed' do
   action [:stop, :start]
+  provider Chef::Provider::Service::Upstart
 end
