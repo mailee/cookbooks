@@ -2,6 +2,7 @@ require 'yaml'
 
 include_recipe "git"
 
+
 user = `ls /home/`.split("\n")[0]
 
 directory node['maileed']['deploy_dir'] do
@@ -35,6 +36,16 @@ file "#{node['maileed']['deploy_dir']}/config.yml" do
   mode "0644"
   action :create
   content YAML::dump(config)
+end
+
+file "#{node['maileed']['deploy_dir']}/dkim.key" do
+  mode "0644"
+  action :create
+  content node['maileed']['dkim_private_key']
+end
+
+execute "pip install -r requirements.txt" do
+  cwd node['maileed']['deploy_dir']
 end
 
 service 'maileed' do
