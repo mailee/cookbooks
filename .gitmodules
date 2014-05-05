@@ -61,3 +61,6 @@
 [submodule "dnsmasq"]
 	path = dnsmasq
 	url = https://github.com/hw-cookbooks/dnsmasq.git
+[submodule "chef-wkhtmltopdf"]
+	path = chef-wkhtmltopdf
+	url = git@github.com:bflad/chef-wkhtmltopdf.git
