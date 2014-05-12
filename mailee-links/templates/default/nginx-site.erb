@@ -1,0 +1,112 @@
+upstream unicorn_<%= @application[:domains].first %> {
+ server unix:<%= @application[:deploy_to] %>/shared/sockets/unicorn.sock fail_timeout=0;
+}
+
+server {
+  listen   80 default;
+  server_name  <%= @application[:domains].join(" ") %> <%= node[:hostname] %>;
+  access_log  <%= node[:nginx][:log_dir] %>/<%= @application[:domains].first %>.access.log;
+
+  keepalive_timeout 5;
+
+  root <%= @application[:deploy_to] %>/current/public/;
+
+
+  location / {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+
+    proxy_read_timeout 60;
+    proxy_send_timeout 60;
+
+    # If you don't find the filename in the static files
+    # Then request it from the unicorn server
+    if (!-f $request_filename) {
+      proxy_pass http://unicorn_<%= @application[:domains].first %>;
+      break;
+    }
+  }
+
+  # Mailee.me specific redirects
+  # even with the paths below changed on maileed, we need this to
+  # take care of the clients with custom urls
+
+  # empty image for delivery count
+  location /go/view/ {
+    rewrite      ^ http://event-api.mailee.me$request_uri? permanent;
+  }
+
+  # external link
+  location /go/click {
+    rewrite      ^ http://event-api.mailee.me$request_uri? permanent;
+  }
+
+  # this is to keep the assets of old messages working
+  location ~* /(clients|contacts|galleries|header_images|messages|templates|wireframes)/\d+/\w+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
+    rewrite      ^ http://assets.<%= @application[:domains].first.split('.')[1] %>.me$request_uri?;
+  }
+
+  location ~* /clients/\w+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
+    rewrite      ^ http://tassets.<%= @application[:domains].first.split('.')[1] %>.me$request_uri?;
+  }
+
+  location ~* /clients/\w+/\w+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
+    rewrite      ^ http://tassets.<%= @application[:domains].first.split('.')[1] %>.me$request_uri?;
+  }
+  location ~* /clients/\w+/\w+/\w+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
+    rewrite      ^ http://tassets.<%= @application[:domains].first.split('.')[1] %>.me$request_uri?;
+  }
+
+  location /nginx_status {
+    stub_status on;
+    access_log off;
+    allow 127.0.0.1;
+    deny all;
+  }
+
+  error_page 500 502 503 504 /500.html;
+  location = /500.html {
+    root <%= @application[:deploy_to] %>/current/public/;
+  }
+}
+
+<% if @application[:ssl_support] %>
+server {
+  listen   443 default;
+  server_name  <%= @application[:domains].join(" ") %> <%= node[:hostname] %>;
+  access_log  <%= node[:nginx][:log_dir] %>/<%= @application[:domains].first %>-ssl.access.log;
+
+  ssl on;
+  ssl_certificate /etc/nginx/ssl/<%= @application[:domains].first %>.crt;
+  ssl_certificate_key /etc/nginx/ssl/<%= @application[:domains].first %>.key;
+  <% if @application[:ssl_certificate_ca] -%>
+  ssl_client_certificate /etc/nginx/ssl/<%= @application[:domains].first %>.ca;
+  <% end -%>
+  keepalive_timeout 5;
+
+  root <%= @application[:deploy_to] %>/current/public/;
+
+  location / {
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+
+    proxy_read_timeout 60;
+    proxy_send_timeout 60;
+
+    # If you don't find the filename in the static files
+    # Then request it from the unicorn server
+    if (!-f $request_filename) {
+      proxy_pass http://unicorn_<%= @application[:domains].first %>;
+      break;
+    }
+  }
+
+  error_page 500 502 503 504 /500.html;
+  location = /500.html {
+    root <%= @application[:deploy_to] %>/current/public/;
+  }
+}
+<% end %>
