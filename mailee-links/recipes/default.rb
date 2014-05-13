@@ -10,7 +10,8 @@
 config_file = "#{node[:nginx][:dir]}/sites-available/#{node[:deploy][:mailee_staging][:application]}"
 
 if File.exists? config_file
-
+  name = node["applications"].first["slug_name"]
+  @application = node["deploy"][name]
   template config_file do
     source "nginx-site.erb"
     owner "root"
@@ -22,5 +23,5 @@ if File.exists? config_file
     action [:reload]
     provider Chef::Provider::Service::Upstart
   end
-  
+
 end
