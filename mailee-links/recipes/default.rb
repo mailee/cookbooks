@@ -10,7 +10,7 @@
 config_file = "#{node[:nginx][:dir]}/sites-available/#{node[:deploy][:mailee_staging][:application]}"
 
 if File.exists? config_file
-  name = node["applications"].first["slug_name"]
+  name = node["opsworks"]["applications"].first["slug_name"]
   @application = node["deploy"][name]
   template config_file do
     source "nginx-site.erb"
