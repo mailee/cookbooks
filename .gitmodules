@@ -64,3 +64,6 @@
 [submodule "chef-wkhtmltopdf"]
 	path = chef-wkhtmltopdf
 	url = https://github.com/bflad/chef-wkhtmltopdf.git
+[submodule "opsworks-resque"]
+	path = opsworks-resque
+	url = https://github.com/pedroaxl/opsworks-resque.git
