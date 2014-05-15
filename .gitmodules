@@ -67,3 +67,6 @@
 [submodule "opsworks-resque"]
 	path = opsworks-resque
 	url = https://github.com/pedroaxl/opsworks-resque.git
+[submodule "opsworks-resque-scheduler"]
+	path = opsworks-resque-scheduler
+	url = https://github.com/pedroaxl/opsworks-resque-scheduler.git
