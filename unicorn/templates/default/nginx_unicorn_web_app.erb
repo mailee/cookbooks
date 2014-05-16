@@ -145,3 +145,9 @@ server {
   }
 }
 <% end %>
+
+server {
+    listen       80;
+    server_name  mailee.me;
+    return       301 http://www.mailee.me$request_uri;
+}
