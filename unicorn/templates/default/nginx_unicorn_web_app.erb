@@ -3,7 +3,7 @@ upstream unicorn_<%= @application[:domains].first %> {
 }
 
 server {
-  listen 80;
+  listen 80 default;
   server_name <%= @application[:domains].join(" ") %> <%= node[:hostname] %>;
 
   <% if @application[:log_format] %>
