@@ -29,6 +29,11 @@ server {
     proxy_set_header Host $http_host;
     proxy_redirect off;
 
+    # this is to redirect to https using headers from ELB
+    if ($http_x_forwarded_proto != 'https') {
+      rewrite ^ https://$host$request_uri? permanent;
+    }
+
   <% if node[:nginx] && node[:nginx][:proxy_read_timeout] -%>
     proxy_read_timeout <%= node[:nginx][:proxy_read_timeout] %>;
   <% end -%>
@@ -71,6 +76,9 @@ server {
     rewrite      ^ http://tassets.mailee.me$request_uri?;
   }
   location ~* /clients/\w+/\w+/\w+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
+    rewrite      ^ http://tassets.mailee.me$request_uri?;
+  }
+  location ~* ^\/\b(\w+)\b(?<!assets)\/\w+\/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
     rewrite      ^ http://tassets.mailee.me$request_uri?;
   }
 
