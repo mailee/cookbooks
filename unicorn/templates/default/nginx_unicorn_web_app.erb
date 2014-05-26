@@ -29,10 +29,19 @@ server {
     proxy_set_header Host $http_host;
     proxy_redirect off;
 
-    # this is to redirect to https using headers from ELB
+    # this is a tricky hack to redirect to https
     if ($http_x_forwarded_proto != 'https') {
+      set $should_redirect_to_https 1;
+    }
+    # this case is when the user is accessing through a custom domain
+    if ($host !~* "mailee") {
+      set $should_redirect_to_https 0;
+    }
+    if ($should_redirect_to_https) {
       rewrite ^ https://$host$request_uri? permanent;
     }
+
+
 
   <% if node[:nginx] && node[:nginx][:proxy_read_timeout] -%>
     proxy_read_timeout <%= node[:nginx][:proxy_read_timeout] %>;
@@ -68,15 +77,19 @@ server {
     rewrite      ^ http://assets.mailee.me$request_uri?;
   }
 
-  location ~* /clients/\w+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
+  location ~* /tmp/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
+    rewrite      ^ http://assets.mailee.me$request_uri?;
+  }
+
+  location ~* /clients/[\w-]+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
     rewrite      ^/clients(/.*)$ http://tassets.mailee.me$1;
 
   }
 
-  location ~* /clients/\w+/\w+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
+  location ~* /clients/[\w-]+/\w+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
     rewrite      ^/clients(/.*)$ http://tassets.mailee.me$1;
   }
-  location ~* /clients/\w+/\w+/\w+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
+  location ~* /clients/[\w-]+/\w+/\w+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
     rewrite      ^/clients(/.*)$ http://tassets.mailee.me$1;
   }
   location ~* ^\/\b(\w+)\b(?<!assets)\/\w+\/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
