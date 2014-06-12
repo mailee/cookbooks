@@ -29,12 +29,19 @@ server {
     proxy_set_header Host $http_host;
     proxy_redirect off;
 
-    # this is a tricky hack to redirect to https
+    # tricky hack to redirect to https with exceptions
     if ($http_x_forwarded_proto != 'https') {
       set $should_redirect_to_https 1;
     }
-    # this case is when the user is accessing through a custom domain
+    # when the user is accessing through a custom domain
     if ($host !~* "mailee") {
+      set $should_redirect_to_https 0;
+    }
+    # when there is a POST to go_controller
+    if ($uri ~ "add_contact_form") {
+      set $should_redirect_to_https 0;
+    }
+    if ($uri ~ "remove_contact_form") {
       set $should_redirect_to_https 0;
     }
     if ($should_redirect_to_https) {
