@@ -3,5 +3,6 @@ node[:deploy].each do |application, deploy|
     source "unicorn.monitrc.erb"
     mode 0644
     variables(:deploy => deploy, :application => application)
+    notifies :restart, resources(:service => "monit")
   end
 end
