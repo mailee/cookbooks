@@ -1,5 +1,4 @@
 check process unicorn with pidfile "<%= @deploy[:deploy_to]%>/shared/pids/unicorn.pid"
-  alert "suporte@mailee.me,pablo@panop.it" but not on { ppid }
   start program = "<%= @deploy[:deploy_to] %>/shared/scripts/unicorn start" 
   stop program = "<%= @deploy[:deploy_to] %>/shared/scripts/unicorn stop"
   group unicorn
