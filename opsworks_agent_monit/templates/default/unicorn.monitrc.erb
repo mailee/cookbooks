@@ -1,4 +1,5 @@
 check process unicorn with pidfile "<%= @deploy[:deploy_to]%>/shared/pids/unicorn.pid"
   start program = "<%= @deploy[:deploy_to] %>/shared/scripts/unicorn start" 
   stop program = "<%= @deploy[:deploy_to] %>/shared/scripts/unicorn stop"
+  if failed unixsocket <%= @deploy[:deploy_to] %>/shared/sockets/unicorn.socket then restart
   group unicorn
