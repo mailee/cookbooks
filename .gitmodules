@@ -66,7 +66,7 @@
 	url = https://github.com/bflad/chef-wkhtmltopdf.git
 [submodule "opsworks-resque"]
 	path = opsworks-resque
-	url = https://github.com/pedroaxl/opsworks-resque.git
+	url = https://github.com/pabloalr/opsworks-resque.git
 [submodule "opsworks-resque-scheduler"]
 	path = opsworks-resque-scheduler
 	url = https://github.com/pedroaxl/opsworks-resque-scheduler.git
