@@ -61,9 +61,6 @@
 [submodule "dnsmasq"]
 	path = dnsmasq
 	url = https://github.com/hw-cookbooks/dnsmasq.git
-[submodule "chef-wkhtmltopdf"]
-	path = chef-wkhtmltopdf
-	url = https://github.com/bflad/chef-wkhtmltopdf.git
 [submodule "opsworks-resque"]
 	path = opsworks-resque
 	url = https://github.com/pabloalr/opsworks-resque.git
