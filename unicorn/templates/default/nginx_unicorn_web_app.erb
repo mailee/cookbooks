@@ -29,7 +29,7 @@ server {
     proxy_set_header Host $http_host;
     proxy_redirect off;
 
-    add_header 'Access-Control-Allow-Origin' 'https://www.mailee.me';
+    add_header 'Access-Control-Allow-Origin' '*';
 
     # tricky hack to redirect to https with exceptions
     if ($http_x_forwarded_proto != 'https') {
@@ -163,7 +163,7 @@ server {
     proxy_send_timeout <%= node[:nginx][:proxy_send_timeout] %>;
   <% end -%>
 
-    add_header 'Access-Control-Allow-Origin' 'https://www.mailee.me';
+    add_header 'Access-Control-Allow-Origin' '*';
 
     # If you don't find the filename in the static files
     # Then request it from the unicorn server
