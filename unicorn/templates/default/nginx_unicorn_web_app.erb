@@ -111,7 +111,7 @@ server {
     rewrite      ^/clients(/.*)$ http://tassets.mailee.me$1;
   }
 
-  location ~* ^\/\b(\w+)\b(?<!assets)\/\w+\/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
+  location ~* ^\/\b([\w-]+)\b(?<!assets)\/[\w-]+\/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
     rewrite      ^ http://tassets.mailee.me$request_uri?;
   }
 
