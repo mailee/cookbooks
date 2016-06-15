@@ -8,5 +8,5 @@ version          '0.1.0'
 
 depends 'git'
 depends 'python', '~> 1.4.6'
-depends 'redisio', '~> 1.7.1'
+depends 'redisio', '~> 2.4.2'
 depends 'dnsmasq', '~> 0.2.0'
