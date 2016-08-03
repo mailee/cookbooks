@@ -22,7 +22,7 @@
 [submodule "build-essential"]
 	path = build-essential
 	url = https://github.com/opscode-cookbooks/build-essential.git
-  tag = 3.2.0
+  tag = v3.2.0
 [submodule "erlang"]
 	path = erlang
 	url = https://github.com/opscode-cookbooks/erlang.git
