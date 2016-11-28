@@ -111,10 +111,13 @@ server {
     rewrite      ^/clients(/.*)$ http://tassets.mailee.me$1;
   }
 
-  location ~* ^\/\b([\w-]+)\b(?<!assets)\/[\w-]+\/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
-    rewrite      ^ http://tassets.mailee.me$request_uri?;
+  location ~* /assets/mosaico/(?:plugins|themes|notoregular|skins)?(?:/.*)$ {
+    rewrite      /assets/mosaico(/.*)$ /mosaico/vendor$1;
   }
 
+  <%# location ~* ^\/\b([\w-]+)\b(?<!assets)\/[\w-]+\/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ { %>
+  <%#   rewrite      ^ http://tassets.mailee.me$request_uri?; %>
+  <%# } %>
 
   location /nginx_status {
     stub_status on;
@@ -192,5 +195,11 @@ server {
 server {
     listen       80;
     server_name  mailee.me;
+    return       301 http://www.mailee.me$request_uri;
+}
+
+server {
+    listen       80;
+    server_name  beta.mailee.me;
     return       301 http://www.mailee.me$request_uri;
 }
