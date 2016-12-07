@@ -86,6 +86,10 @@ server {
     rewrite      ^ http://event-api.mailee.me$request_uri? permanent;
   }
 
+  location ~* /assets/mosaico/(?:plugins|themes|notoregular|skins)?(?:/.*)$ {
+    rewrite      /assets/mosaico(/.*)$ /mosaico/vendor$1 break;
+  }
+
   # this is to keep the assets of old messages working
   location ~* /(clients|contacts|galleries|header_images|messages|templates|wireframes)/\d+/\w+/\w+/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
     rewrite      ^ http://assets.mailee.me$request_uri?;
@@ -111,13 +115,9 @@ server {
     rewrite      ^/clients(/.*)$ http://tassets.mailee.me$1;
   }
 
-  location ~* /assets/mosaico/(?:plugins|themes|notoregular|skins)?(?:/.*)$ {
-    rewrite      /assets/mosaico(/.*)$ /mosaico/vendor$1;
+  location ~* ^\/\b([\w-]+)\b(?<!assets)\/[\w-]+\/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ { 
+    rewrite      ^ http://tassets.mailee.me$request_uri?;
   }
-
-  <%# location ~* ^\/\b([\w-]+)\b(?<!assets)\/[\w-]+\/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ { %>
-  <%#   rewrite      ^ http://tassets.mailee.me$request_uri?; %>
-  <%# } %>
 
   location /nginx_status {
     stub_status on;
