@@ -127,6 +127,10 @@ server {
     deny all;
   }
 
+  location /message-bus/ {
+    access_log off;
+  }
+
   error_page 500 502 503 504 /500.html;
   location = /500.html {
     root <%= @application[:absolute_document_root] %>;
@@ -190,6 +194,11 @@ server {
   location = /500.html {
     root <%= @application[:absolute_document_root] %>;
   }
+
+  location /message-bus/ {
+    access_log off;
+  }
+
 }
 <% end %>
 
