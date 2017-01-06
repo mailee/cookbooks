@@ -131,6 +131,10 @@ server {
     access_log off;
   }
 
+  location ^\/(?:messages|reports)\/\d+\/progress$ {
+    access_log off;
+  }
+
   error_page 500 502 503 504 /500.html;
   location = /500.html {
     root <%= @application[:absolute_document_root] %>;
@@ -183,12 +187,12 @@ server {
 
   # empty image for delivery count
   location /go/view/ {
-    rewrite      ^ https://event-api.mailee.me$request_uri? permanent;
+    rewrite ^ https://event-api.mailee.me$request_uri? permanent;
   }
 
   # external link
   location /go/click {
-    rewrite      ^ https://event-api.mailee.me$request_uri? permanent;
+    rewrite ^ https://event-api.mailee.me$request_uri? permanent;
   }
   error_page 500 502 503 504 /500.html;
   location = /500.html {
@@ -196,6 +200,10 @@ server {
   }
 
   location /message-bus/ {
+    access_log off;
+  }
+
+  location ^\/(?:messages|reports)\/\d+\/progress$ {
     access_log off;
   }
 
