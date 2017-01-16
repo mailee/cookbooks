@@ -25,6 +25,9 @@ server {
   <% end %>
 
   location ~* (?:\/message-bus|progress) {
+    proxy_buffering off;
+    proxy_http_version 1.1;
+
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_redirect off;
@@ -62,12 +65,14 @@ server {
     }
 
 
-
+  <% if node[:nginx] && node[:nginx][:proxy_connect_timeout] -%>
+    proxy_connect_timeout <%= node[:nginx][:proxy_connect_timeout] %>;
+  <% end -%>
   <% if node[:nginx] && node[:nginx][:proxy_read_timeout] -%>
-    proxy_read_timeout <%= node[:nginx][:proxy_read_timeout] %>;
+    proxy_read_timeout    <%= node[:nginx][:proxy_read_timeout] %>;
   <% end -%>
   <% if node[:nginx] && node[:nginx][:proxy_send_timeout] -%>
-    proxy_send_timeout <%= node[:nginx][:proxy_send_timeout] %>;
+    proxy_send_timeout    <%= node[:nginx][:proxy_send_timeout] %>;
   <% end -%>
 
     # If you don't find the filename in the static files
@@ -171,11 +176,14 @@ server {
     proxy_set_header Host $http_host;
     proxy_redirect off;
 
+  <% if node[:nginx] && node[:nginx][:proxy_connect_timeout] -%>
+    proxy_connect_timeout <%= node[:nginx][:proxy_connect_timeout] %>;
+  <% end -%>
   <% if node[:nginx] && node[:nginx][:proxy_read_timeout] -%>
-    proxy_read_timeout <%= node[:nginx][:proxy_read_timeout] %>;
+    proxy_read_timeout    <%= node[:nginx][:proxy_read_timeout] %>;
   <% end -%>
   <% if node[:nginx] && node[:nginx][:proxy_send_timeout] -%>
-    proxy_send_timeout <%= node[:nginx][:proxy_send_timeout] %>;
+    proxy_send_timeout    <%= node[:nginx][:proxy_send_timeout] %>;
   <% end -%>
 
     more_set_headers 'Access-Control-Allow-Origin: *';
