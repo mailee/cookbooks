@@ -45,6 +45,10 @@ server {
 
     more_set_headers 'Access-Control-Allow-Origin: *';
 
+    if (-f $document_root/maintenance.html) {
+      return 503;
+    }
+
     # tricky hack to redirect to https with exceptions
     if ($http_x_forwarded_proto != 'https') {
       set $should_redirect_to_https 1;
@@ -143,10 +147,16 @@ server {
     deny all;
   }
 
-  error_page 500 502 503 504 /500.html;
+  error_page 500 502 504 /500.html;
   location = /500.html {
     root <%= @application[:absolute_document_root] %>;
   }
+
+  error_page 503 @maintenance;
+  location @maintenance {
+    rewrite ^(.*)$ /maintenance.html break;
+  }
+
 }
 
 <% if @application[:ssl_support] %>
@@ -188,6 +198,10 @@ server {
 
     more_set_headers 'Access-Control-Allow-Origin: *';
 
+    if (-f $document_root/maintenance.html) {
+      return 503;
+    }
+
     # If you don't find the filename in the static files
     # Then request it from the unicorn server
     if (!-f $request_filename) {
@@ -205,9 +219,14 @@ server {
   location /go/click {
     rewrite ^ https://event-api.mailee.me$request_uri? permanent;
   }
-  error_page 500 502 503 504 /500.html;
+  error_page 500 502 504 /500.html;
   location = /500.html {
     root <%= @application[:absolute_document_root] %>;
+  }
+
+  error_page 503 @maintenance;
+  location @maintenance {
+    rewrite ^(.*)$ /maintenance.html break;
   }
 
 }
