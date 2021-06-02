@@ -92,6 +92,11 @@ server {
     return 410;
   }
 
+  # Limit HTTP methods hitting Rails
+  if ($request_method !~ ^(GET|HEAD|PUT|POST|DELETE|OPTIONS|PATCH)$ ){
+    return 405;
+  }
+
   # Mailee.me specific redirects
   # even with the paths below changed on maileed, we need this to
   # take care of the clients with custom urls
