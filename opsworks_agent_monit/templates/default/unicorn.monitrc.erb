@@ -3,3 +3,7 @@ check process unicorn with pidfile "<%= @deploy[:deploy_to]%>/shared/pids/unicor
   stop program = "/bin/bash -c 'kill -QUIT `cat <%= @deploy[:deploy_to] %>/shared/pids/unicorn.pid`'" as uid deploy and gid www-data
   if totalmemory greater than 80% for 3 cycles then restart
   group unicorn
+
+  check system <%= node[:hostname] %>
+    if swap > 30% for 2 cycles then exec "/bin/bash -c 'monit restart unicorn'"
+  
