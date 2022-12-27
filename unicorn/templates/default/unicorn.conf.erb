@@ -1,4 +1,6 @@
-require 'message_bus'
+<% if @application == 'mailee' %>
+  require 'message_bus'
+<% end %>
 
 worker_processes <%= node[:unicorn][:worker_processes] %>
 
@@ -58,6 +60,8 @@ after_fork do |server, worker|
   # and Redis.  TokyoCabinet file handles are safe to reuse
   # between any number of forked children (assuming your kernel
   # correctly implements pread()/pwrite() system calls)
-
-  MessageBus.after_fork
+  
+  <% if @application == 'mailee' %>
+    MessageBus.after_fork
+  <% end %>
 end
