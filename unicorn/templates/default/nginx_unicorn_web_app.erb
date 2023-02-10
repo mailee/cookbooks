@@ -144,7 +144,7 @@ server {
   }
 
   # dont rewrite when uri contains "assets" or "wireframes"
-  location ~* ^\/\b([\w-]+)\b(?<!assets|wireframes)\/[\w-]+\/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ { 
+  location ~* ^\/\b([\w-]+)\b(?<!assets|wireframes)\/[\w-]+\/.*\.(gif|jpg|jpeg|png|bmp|tiff|svg)$ {
     rewrite      ^ http://tassets.mailee.me$request_uri?;
   }
 
@@ -252,6 +252,16 @@ server {
   error_page 503 @maintenance;
   location @maintenance {
     rewrite ^(.*)$ /maintenance.html break;
+  }
+
+  # Drop non rails requests
+  location ~ \.(asp|aspx|php|jsp|cgi)$ {
+    return 410;
+  }
+
+  # Limit HTTP methods hitting Rails
+  if ($request_method !~ ^(GET|HEAD|PUT|POST|DELETE|OPTIONS|PATCH)$ ){
+    return 405;
   }
 
 }
