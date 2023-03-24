@@ -188,6 +188,11 @@ server {
     client_max_body_size <%= @application[:nginx][:client_max_body_size] %>;
   <% end %>
 
+  if ($host !~* ^[a-z0-9-_]+\.(?:agency\.)?mailee\.me$) {
+    return 404;
+    break;
+  }
+
   location ~* (?<custom_location>message-bus|progress) {
     proxy_buffering off;
     proxy_http_version 1.1;
